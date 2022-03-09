@@ -203,8 +203,7 @@ function App() {
 
 
   const api_positive = (callback, country) => {
-    setLoading(true)
-    
+   
     axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22af42ed1a-0fb4-4846-9a28-f8baf3aee826%22%20WHERE%20region%20LIKE%20%27${country}%27&limit=1500`)
       .then(res => {
         console.log('pos', res.data.result.records)
@@ -226,7 +225,6 @@ function App() {
   }
 
   const api_new_cases = (callback, country) => {
-    setLoading(true)
     
     axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261ed4090-1598-4822-aa11-815e5984aba4%22%20WHERE%20region%20LIKE%20%27${country}%27&limit=1500`)
       .then(res => {
@@ -252,13 +250,6 @@ function App() {
     const position = window.pageYOffset;
     setScrollPosition(position);
 };
-
-
-  // useEffect(() => {
-
-  //   api(updateData2)
-  //   api(PositiveDataDefault2)
-  // }, [selectedCountry2])
 
   useEffect(() => {
     api_positive(updateCountryPositive2, country2 )
