@@ -40,8 +40,8 @@ function App() {
   const [no_embed_style, set_no_embed_style] = useState({ paddingTop: '20px' })
   const [selectedCountry1, setSelectedCountries1] = useState()
   const [selectedCountry2, setSelectedCountries2] = useState()
-  const [country1, setCountry1] = useState()
-  const [country2, setCountry2] = useState('')
+  const [country1, setCountry1] = useState('Africa')
+  const [country2, setCountry2] = useState('Africa')
   const [duration, setDuration] = useState()
 
 
@@ -237,10 +237,15 @@ function App() {
     axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search?resource_id=61ed4090-1598-4822-aa11-815e5984aba4&q=${country}`)
       .then(res => {
         console.log(res.data)
+        if(res.data.result.records.length < 1){
+          setError(true)
+        }
+        else{
+          setError(false)
+        }
         callback(res.data.result)
         setRecords(res.data.result.records)
         setLoading(false)
-        setError(false)
       })
       .catch(error=>{
         setLoading(false)
