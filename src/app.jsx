@@ -23,18 +23,15 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [records, setRecords] =  useState([])
+  const [new_cases_records, setNewCasesRecords] =  useState([])
   const [scrollPosition, setScrollPosition] = useState(0);
   //New Tests: Regional Comparison
-  const [series1, setSeries1] = useState({})
-  const [series2, setSeries2] = useState({})
-  const [series, setSeries] = useState()
+  const [series, setSeries] = useState([])
   const [dates, setDates] = useState([])
 
   //Positivity Rate: Regional Comparison
-  const [seriesP, setSeriesP] = useState()
+  const [seriesP, setSeriesP] = useState([])
   const [datesP, setDatesP] = useState([])
-  const [seriesP1, setSeriesP1] = useState({})
-  const [seriesP2, setSeriesP2] = useState({})
 
 
   const [no_embed_style, set_no_embed_style] = useState({ paddingTop: '20px' })
@@ -42,14 +39,12 @@ function App() {
   const [selectedCountry2, setSelectedCountries2] = useState()
   const [country1, setCountry1] = useState('Africa')
   const [country2, setCountry2] = useState('Africa')
-  const [duration, setDuration] = useState()
 
 
   const countrySelect1 = (country) => {
     if (_.find(selectedCountry1, function (o) { return o.iso_code == country.iso_code }) == undefined) {
       setSelectedCountries1(country);
       setCountry1(country.location)
-      api(updateCountry1, country.location )
       console.log(country)
       //setFlag1(country)
     }
@@ -64,7 +59,7 @@ function App() {
   }
 
   const months = (month) => {
-    let file_data = records;
+    let file_data = new_cases_records;
     var d = new Date();
     console.log('today ', d)
     d.setMonth(d.getMonth() - month);
@@ -113,14 +108,35 @@ function App() {
     }
   }
 
-
-  const updateCountry2 = (result) => {
+  const updateCountryPositive1 = (result) => {
     let file_data = result.records;
     let dates = _.map(file_data, 'date');
     setDates(dates)
     setDatesP(dates)
-    let chart_data = _.map(file_data, 'new_cases');
-    let chart_dataP = _.map(file_data, 'new_cases');
+    let chart_data = _.map(file_data, 'positive_rate');
+    let ser = {
+      name: country1,
+      data: chart_data,
+      type: 'line',
+      smooth: true,
+      itemStyle: {
+        borderWidth: 3,
+        width: 2,
+        color: '#BDEECB'
+      },
+    };
+    let series = seriesP
+    series[0] = ser
+    console.log('series', series)
+    setSeriesP(series)
+  }
+  const updateCountryPositive2 = (result) => {
+    let file_data = result.records;
+    let dates = _.map(file_data, 'date');
+    setDates(dates)
+    setDatesP(dates)
+    let chart_data = _.map(file_data, 'positive_rate');
+    console.log('posi', country2, chart_data)
     
     let ser = {
       name: country2,
@@ -133,32 +149,18 @@ function App() {
         color: '#094151'
       },
     };
-
-    let seriesP = {
-      name: country2,
-      data: chart_dataP,
-      type: 'line',
-      smooth: true,
-      itemStyle: {
-        borderWidth: 3,
-        width: 2,
-        color: '#094151'
-      },
-    };
-    
-    setChartP2(seriesP)
-    setChart2(ser)
-
+    let series = seriesP
+    series[1] = ser
+    setSeriesP(series)
   }
 
 
-  const updateCountry1 = (result) => {
+  const updateCountryNewCases1 = (result) => {
     let file_data = result.records;
     let dates = _.map(file_data, 'date');
     setDates(dates)
     setDatesP(dates)
     let chart_data = _.map(file_data, 'new_cases');
-    let chart_dataP = _.map(file_data, 'new_cases');
     
     let ser = {
       name: country1,
@@ -171,72 +173,43 @@ function App() {
         color: '#BDEECB'
       },
     };
+    let newSeries = series
+    newSeries[0] = ser
+    setSeries(newSeries)
 
-    let seriesP = {
-      name: country1,
-      data: chart_dataP,
+  }
+
+  const updateCountryNewCases2 = (result) => {
+    let file_data = result.records;
+    let dates = _.map(file_data, 'date');
+    setDates(dates)
+    setDatesP(dates)
+    let chart_data = _.map(file_data, 'new_cases');
+    
+    let ser = {
+      name: country2,
+      data: chart_data,
       type: 'line',
       smooth: true,
       itemStyle: {
         borderWidth: 3,
         width: 2,
-        color: '#BDEECB'
+        color: '#094151'
       },
     };
-    
-    setChartP1(seriesP)
-    setChart1(ser)
-
-  }
-
-  const setChartP1 = (ser)=>{
-    if(seriesP2){
-      setSeriesP([ser, seriesP2])
-      setSeriesP1(ser)
-    }
-    else{
-      setSeriesP([ser])
-      setSeriesP1(ser)
-    }
-  }
-  const setChart1 = (ser)=>{
-    if(series2){
-      setSeries([ser, series2])
-      setSeries1(ser)
-    }
-    else{
-      setSeries([ser])
-      setSeries1(ser)
-    }
-  }
-
-  const setChartP2 = (ser)=>{
-    if(seriesP1){
-      setSeriesP([seriesP1, ser])
-      setSeriesP2(ser)
-    }
-    else{
-      setSeriesP([ser])
-      setSeriesP2(ser)
-    }
-  }
-  const setChart2 = (ser)=>{
-    if(series1){
-      setSeries([series1, ser])
-      setSeries2(ser)
-    }
-    else{
-      setSeries([ser])
-      setSeries2(ser)
-    }
+    let newSeries = series
+    newSeries[1] = ser
+    setSeries(newSeries)
   }
 
 
-  const api = (callback, country) => {
+
+  const api_positive = (callback, country) => {
     setLoading(true)
-    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search?resource_id=61ed4090-1598-4822-aa11-815e5984aba4&q=${country}`)
+    
+    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22af42ed1a-0fb4-4846-9a28-f8baf3aee826%22%20WHERE%20region%20LIKE%20%27${country}%27&limit=1500`)
       .then(res => {
-        console.log(res.data)
+        console.log('pos', res.data.result.records)
         if(res.data.result.records.length < 1){
           setError(true)
         }
@@ -245,6 +218,29 @@ function App() {
         }
         callback(res.data.result)
         setRecords(res.data.result.records)
+        setLoading(false)
+      })
+      .catch(error=>{
+        setLoading(false)
+        setError(true)
+        console.log(error)
+      })
+  }
+
+  const api_new_cases = (callback, country) => {
+    setLoading(true)
+    
+    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261ed4090-1598-4822-aa11-815e5984aba4%22%20WHERE%20region%20LIKE%20%27${country}%27&limit=1500`)
+      .then(res => {
+        console.log('new cases:', res.data.result.records)
+        if(res.data.result.records.length < 1){
+          setError(true)
+        }
+        else{
+          setError(false)
+        }
+        callback(res.data.result)
+        setNewCasesRecords(res.data.result.records)
         setLoading(false)
       })
       .catch(error=>{
@@ -267,16 +263,19 @@ function App() {
   // }, [selectedCountry2])
 
   useEffect(() => {
-    api(updateCountry2, country2 )
+    api_positive(updateCountryPositive2, country2 )
+    api_new_cases(updateCountryNewCases2, country2 )
 }, [country2])
 
     useEffect(() => {
-      api(updateCountry1, country1 )
+      api_new_cases(updateCountryNewCases1, country1 )
+      api_positive(updateCountryPositive1, country1 )
   }, [country1])
 
 
   useEffect(() => {
-    api(updateCountry1, 'Africa' )
+    api_new_cases(updateCountryNewCases1, country1 )
+    api_positive(updateCountryPositive1, country1 )
     if (window.location.search != '?embed') {
       set_no_embed_style({ paddingTop: '100px' })
     }
@@ -330,7 +329,7 @@ function App() {
                     />
                 </Col>
                 <Col md={6} className="d-flex justify-content-end align-items-center date_range-wrapper">
-                    <DateRange setDuration={setDuration}/>
+                    <DateRange setDuration={duration_months}/>
                 </Col>
             </Row>
             </Container>

@@ -472,6 +472,13 @@ footer{
     }
 }
 
+.dropdown-menu{
+    height: 500px;
+    overflow: auto;
+    width: fit-content;
+    @include custom-scrollbar(rgb(185, 185, 185), 5px);
+}
+
 .app{
     
     @media (max-width: $tablet) {
