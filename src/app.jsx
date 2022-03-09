@@ -45,8 +45,7 @@ function App() {
     if (_.find(selectedCountry1, function (o) { return o.iso_code == country.iso_code }) == undefined) {
       setSelectedCountries1(country);
       setCountry1(country.location)
-      console.log(country)
-      //setFlag1(country)
+  
     }
   }
 
@@ -54,7 +53,6 @@ function App() {
     if (_.find(selectedCountry2, function (o) { return o.iso_code == country.iso_code }) == undefined) {
       setSelectedCountries2(country);
       setCountry2(country.location)
-      //api(updateCountry2, country.location )
     }
   }
 
