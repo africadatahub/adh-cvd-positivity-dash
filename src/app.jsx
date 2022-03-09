@@ -206,7 +206,6 @@ function App() {
    
     axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22af42ed1a-0fb4-4846-9a28-f8baf3aee826%22%20WHERE%20region%20LIKE%20%27${country}%27&limit=1500`)
       .then(res => {
-        console.log('pos', res.data.result.records)
         if(res.data.result.records.length < 1){
           setError(true)
         }
@@ -228,7 +227,6 @@ function App() {
     
     axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261ed4090-1598-4822-aa11-815e5984aba4%22%20WHERE%20region%20LIKE%20%27${country}%27&limit=1500`)
       .then(res => {
-        console.log('new cases:', res.data.result.records)
         if(res.data.result.records.length < 1){
           setError(true)
         }
