@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import ReactECharts from 'echarts-for-react';
 import _ from 'lodash';
+import { Modal } from 'bootstrap'
 
 
 const ChartBox = ({ title, series, dates, min }) => {
@@ -31,8 +32,25 @@ const ChartBox = ({ title, series, dates, min }) => {
 
         return val;
     }
-    const desktopFormatter = value =>{
-        return value
+    const embeddedCode = () => {
+        console.log('embeded clicked')
+        var url = window.location.href + '?embed_positive';
+        var div = document.createElement('textarea');
+        var iframe = `<iframe width="700" height="400" src="${url}" frameBorder="0"></iframe>`;
+        div.innerHTML = iframe;
+        var element = document.getElementById('iframe1');
+        iframe.src = url
+        console.log(iframe)
+
+        if (!element.hasChildNodes()) {
+            // It has at least one
+            element.appendChild(div);
+        }
+
+        var myModal = new Modal(document.getElementById('exampleModal1'), {
+            keyboard: false
+        });
+        myModal.show();
     }
 
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -162,11 +180,11 @@ const ChartBox = ({ title, series, dates, min }) => {
                     />
                     <div className="row">
                         <div className="col d-flex align-items-center">
-                            <p className="source">Source: <a href="/#">Our World in Data (OWID)</a></p>
+                            <p className="source">Source: <a target="_blank" href="https://adhtest.opencitieslab.org/datastore/dump/af42ed1a-0fb4-4846-9a28-f8baf3aee826">Our World in Data (OWID)</a></p>
                         </div>
                         <div className="col col-btns">
-                            <a href="" className="share btn">Share</a>
-                            <a onClick={(e)=>{e.preventDefault(); downloadChart()}} className="download-btn btn">Download data</a>
+                            <a onClick={(e)=>{e.preventDefault(); embeddedCode()}} className="share btn">Share</a>
+                            <a target="_blank" href="https://adhtest.opencitieslab.org/datastore/dump/af42ed1a-0fb4-4846-9a28-f8baf3aee826?bom=True" className="download-btn btn">Download data</a>
                         </div>
                     </div>
                 </div>
@@ -180,6 +198,21 @@ const ChartBox = ({ title, series, dates, min }) => {
                     </div>
                 </div>
             </div>
+
+            <div className="modal fade " id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Embeded Code</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body" id="modal-body">
+                            <div id="iframe1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     )
 }

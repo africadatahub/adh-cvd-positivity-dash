@@ -483,6 +483,11 @@ footer{
 }
 
 .app{
+    #iframe, #iframe1{
+        textarea{
+            width: 100%;
+        }
+    }
     @media (min-width: $tablet) {
         .text{
             .text--box{
@@ -557,7 +562,7 @@ footer{
             padding-bottom: 10px;
             .date_range{
                 padding: 10px;
-                padding-left: 16px;
+                padding-left: 14px;
                 transition:all 1s linear;
                 .date_range-title{
                     float: left;

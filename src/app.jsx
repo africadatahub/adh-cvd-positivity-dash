@@ -295,7 +295,7 @@ function App() {
 
         <>
           <div className="header pb-3">
-            {window.location.search != '?embed' ? <Header /> : ''}
+            {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' ? <Header /> : ''}
             <Intro no_embed_style={no_embed_style}
               selectedCountry1={selectedCountry1}
               selectedCountry2={selectedCountry2}
@@ -322,12 +322,9 @@ function App() {
             </Container>
 
           </div>
-          {
-            dates ? 
-            <ChartBox title="New Tests: Regional Comparison" series={series} dates={dates} />:""
-          }
-          <ChartBoxP title="Positivity Rate: Regional Comparison" series={seriesP} dates={datesP} />
-          <Footer />
+          {window.location.search != '?embed_positive' ? <ChartBox title="New Tests: Regional Comparison" series={series} dates={dates} />: ''} 
+          {window.location.search != '?embed_newcases' ? <ChartBoxP title="Positivity Rate: Regional Comparison" series={seriesP} dates={datesP} />: ''} 
+          {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' ? <Footer />: ''} 
         </>
   );
 }
