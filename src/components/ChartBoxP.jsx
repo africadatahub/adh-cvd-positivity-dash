@@ -1,25 +1,91 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactECharts from 'echarts-for-react';
 import _ from 'lodash';
 
 
 const ChartBox = ({ title, series, dates, min }) => {
+    const echartRef = useRef();
+    const [width, setWidth] = useState(window.innerWidth);
+    const handleWindowSizeChange =()=>{
+        setWidth(window.innerWidth);
+    }
+    useEffect(() => {
+        window.addEventListener('resize', handleWindowSizeChange);
+        return () => {
+            window.removeEventListener('resize', handleWindowSizeChange);
+        }
+    }, []);
+    
+    const isMobile = width <= 768;
+
+    const mobileFormatter = value =>{
+        let val = '';
+        if(value >= 1000000) {
+            val = value / 1000000 + 'm';
+        } else if(value >= 1000) {
+            val = value / 1000 + 'k';
+        } else {
+            val = value;
+        } 
+
+
+        return val;
+    }
+    const desktopFormatter = value =>{
+        return value
+    }
+
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-  ];
-    
+    ];
 
+    const downloadChart = ()=>{
+        const echartInstance = echartRef.current.getEchartsInstance();
+        echartInstance.setOption({
+            graphic: [
+                { 
+                    type: 'image',
+                    left: 'center', 
+                    top: '0%',  
+                    style: {
+                        image: '/adh-logo.svg',
+                        width: 150,
+                        opacity: 0.3
+                    }
+                }
+            ]    
+        })
+        var a = document.createElement("a");
+        a.href = echartInstance.getDataURL({
+            pixelRatio: 2,
+            backgroundColor: '#fff'
+        });
+        a.download = true
+        a.click();
+    }
 
+    useEffect(()=>{
+        
+        if(isMobile){
+            if(echartRef != null && echartRef != undefined){
+                const echartInstance = echartRef.current.getEchartsInstance();
+                echartInstance.resize();
+            }
+        }
+    },[isMobile])
 
-    // useEffect(()=>{
-    // },[])
+    useEffect(()=>{
+        console.log(echartRef.current.getEchartsInstance())
+    },[series])
     return (
         <div className="chart-box container">
             <div className="row">
-                <div className="col-md-9">
+                <div className="col-md-8 chart-wrapper">
                     <h3 className="chart-box--title">{title}</h3>
                     <ReactECharts
+                    ref={echartRef}
                         option={{
+                            grid: isMobile ? { top:20, bottom: 80, left: 60, right: 60} : {},
                             legend: {},
                             yAxis: [
                                 {
@@ -27,11 +93,19 @@ const ChartBox = ({ title, series, dates, min }) => {
                                     type: 'value',
                                     name: 'Value',
                                     nameLocation : 'middle',
-                                    position: 'left',
-                                    nameGap: 80,
-                                    offset: 0,
+                                    nameGap: 40,
+                                    nameTextStyle : {
+                                        fontWeight: '500',
+                                        fontFamily : 'Work Sans',
+                                        fontSize: 12,
+                                        color:'#000000'
+                                    },
                                     axisLabel: {
-                                        formatter: '{value}'
+                                        formatter: isMobile ? mobileFormatter : '{value}',
+                                        fontWeight: '500',
+                                        fontFamily : 'Work Sans',
+                                        fontSize: 12,
+                                        color:'#000000'
                                     }
                                 },
                             ],
@@ -39,8 +113,14 @@ const ChartBox = ({ title, series, dates, min }) => {
                                 type: 'category', 
                                 name: 'Date',
                                 nameLocation : 'middle',
-                                nameGap: 50,
-                                axisLabel: {
+                                nameGap: 40,
+                                nameTextStyle : {
+                                    fontWeight: '500',
+                                    fontFamily : 'Work Sans',
+                                    fontSize: 12,
+                                    color:'#000000'
+                                },
+                                axisLabel: { 
                                     formatter: (function(value){
                                         value = value.split('T')[0];
                                         value = new Date(value)
@@ -78,19 +158,19 @@ const ChartBox = ({ title, series, dates, min }) => {
                             },
                             series: series
                         }}
-                        style={{ height: '360px', width:"100%" }}
+                        style={{ height: '360px' }}
                     />
                     <div className="row">
                         <div className="col d-flex align-items-center">
                             <p className="source">Source: <a href="/#">Our World in Data (OWID)</a></p>
                         </div>
                         <div className="col col-btns">
-                            <a href="" className="download-btn btn">Download data</a>
                             <a href="" className="share btn">Share</a>
+                            <a onClick={(e)=>{e.preventDefault(); downloadChart()}} className="download-btn btn">Download data</a>
                         </div>
                     </div>
                 </div>
-                <div className="col-md-3 text">
+                <div className="col-md-4 text">
                     <h5>How to Read this Chart</h5>
                     <div className="text--box">
                         <p>
