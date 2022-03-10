@@ -109,7 +109,7 @@ h1 {
         justify-content: center;
         align-items: center;
         width: 108px;
-        padding: 8px 14px;
+        padding: 10px 14px;
         margin-left: 5px;
         cursor: pointer;
 
@@ -139,6 +139,7 @@ h1 {
     font-size: 13px;
     line-height: 18px;
     color: #1B404F;
+    margin-top: 20px;
 }
 .country-select .dropdown-toggle::after {
     margin-left: 3em;
@@ -155,6 +156,7 @@ h1 {
         display: flex;
         align-items: center;
         width: 240px;
+        padding: 7px;
     }
 }
 .select-country--title{
@@ -402,20 +404,21 @@ footer{
 .sub-top{
     background: #F8F8F8;
     z-index: 2;
+    transition:all 1s linear;
     &.resize{
         position: fixed;
         width: 100vw;
-        margin-top: -127px;
+        top: 70px;
+        padding-top: 10px;
     }
     // position: fixed;
     // width: 100vw;
 }
 .chart-box{
-    padding: 30px;
+    padding: 20px 30px;
     background-color: #fff;
     border-radius: 10px;
     margin-top: 30px;
-    //margin-bottom: 30px;
     canvas{
         width: 100%;
     }
@@ -437,12 +440,11 @@ footer{
         }
     }
     .col-btns{
-        float: right;
+        text-align: end;
         .btn{
             background: #DFE6E8;
             border-radius: 4px;
             padding: 8px 14px;
-            float: right;
             margin-right: 5px;
             color: #000000;
             font-style: normal;
@@ -460,9 +462,7 @@ footer{
         color: #1B404F;
     }
     .text--box{
-        height: 360px;
         padding-right: 15px;
-        @include custom-scrollbar(rgb(185, 185, 185), 5px);
         p{
             font-weight: normal;
             font-size: 13px;
@@ -475,13 +475,55 @@ footer{
 .dropdown-menu{
     height: 500px;
     overflow: auto;
-    width: fit-content;
+    width: 100%;
     @include custom-scrollbar(rgb(185, 185, 185), 5px);
+}
+.shadow{ 
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 5%) !important;
 }
 
 .app{
+    @media (min-width: $tablet) {
+        .text{
+            .text--box{
+                height: 92%;
+                @include custom-scrollbar(rgb(185, 185, 185), 5px);
+            }
+        }
+        .date_range{
+            position: relative;
+            top: -7px;
+        }
+        .padding-left-zero{
+            padding-left: 0;
+        }
+        .chart-box .text{
+            position: relative;
+            left: -33px;
+            border-left: 1px solid #EBEBEB;
+            padding-left: 30px;
+        }
+        .chart-box .col-btns{
+            margin-right: 73px;
+        }
+    }
     
     @media (max-width: $tablet) {
+        .logo{
+            img{
+                height: 36px !important;
+                margin-left: 12px;
+            }
+        }
+        .header {
+            padding-bottom: 0 !important;
+            .pm-75{
+                padding-top: 75px !important;
+            }
+        }
+        .countries-row{
+            margin-bottom: 0!important;
+        }
         .navlinks{
             display: none;
         }
@@ -507,10 +549,16 @@ footer{
                 font-size: 10px;
             }
         }
+        .chart-box .source{
+            margin-bottom: 20px;
+        }
         .date_range-wrapper{
             justify-content: start !important;
+            padding-bottom: 10px;
             .date_range{
                 padding: 10px;
+                padding-left: 16px;
+                transition:all 1s linear;
                 .date_range-title{
                     float: left;
                     font-size: 10px;
@@ -518,7 +566,7 @@ footer{
                 .date_range-btn{
                     font-size: 12px;
                     width: 85px;
-                    padding: 3px 14px;
+                    padding: 6px 14px;
                 }
             }
         }
@@ -535,18 +583,32 @@ footer{
                 flex: 0 0 auto;
                 border-bottom: 1px solid #EBEBEB;
                 margin-bottom: 20px;
+                .share {
+                    order: 1;
+                }
+                .download-btn{
+                    order: 2;
+                }
                 .btn{
                     float: left;
                     font-size: 12px;
-                    padding: 3px 14px;
+                    padding: 6px 14px;
                     margin-bottom: 20px;
                 }
             }
         }
         .sub-top{
             &.resize{
-                margin-top: -231px;
+                top: 60px;
+                padding-top: 10px;
+                .date_range{
+                    display: none !important;
+                }
             }
+        }
+
+        footer{
+            padding: 25px;
         }
     }
 

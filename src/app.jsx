@@ -305,7 +305,7 @@ function App() {
             />
           </div>
           <div className={ scrollPosition >= 111.11112213134766 ? 'sub-top resize' : "sub-top"}>
-            <Container className="justify-content-between ">
+            <Container className="justify-content-between padding-left-zero ">
             <Row>
                 <Col md={6}>
                     <SelectCountries 

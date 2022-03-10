@@ -10,7 +10,7 @@ const SelectCountries = ({selectedCountry1, selectedCountry2, countrySelect1, co
     return (
         <Row className="mt-2 mb-4 countries-row">
             <Col xs="auto">
-                <Row className="mt-4">
+                <Row >
                     <Col><h5 className="select-country--title" >Select Country/Region 1 </h5></Col>
                 </Row>
                 <DropdownButton 
@@ -29,7 +29,7 @@ const SelectCountries = ({selectedCountry1, selectedCountry2, countrySelect1, co
                         lineHeight: '2em',
                         
                     }} />
-            </div>{selectedCountry1.location}</> : "Choose Countries"} 
+            </div>{selectedCountry1.location}</> : "Choose country"} 
                 
                 className="country-select" >
                     {countriesList.map((country, index) => (
@@ -40,7 +40,7 @@ const SelectCountries = ({selectedCountry1, selectedCountry2, countrySelect1, co
                 </DropdownButton>
             </Col>
             <Col xs="auto">
-                <Row className="mt-4">
+                <Row >
                     <Col>
 
                         <h5 className="select-country--title">Select Country/Region 2 </h5></Col>
@@ -61,7 +61,7 @@ const SelectCountries = ({selectedCountry1, selectedCountry2, countrySelect1, co
                         lineHeight: '2em',
                         
                     }} />
-            </div>{selectedCountry2.location}</> : "Choose Countries"} 
+            </div>{selectedCountry2.location}</> : "Choose country"} 
                 
                 className="country-select" >
                     {countriesList.map((country, index) => (
