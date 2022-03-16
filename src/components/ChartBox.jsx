@@ -66,7 +66,6 @@ const ChartBox = ({ title, series, dates, min }) => {
     }
 
     const embeddedCode = () => {
-        console.log('embeded clicked')
         var url = window.location.href + '?embed_newcases';
         var div = document.createElement('textarea');
         var iframe = `<iframe width="700" height="400" src="${url}" frameBorder="0"></iframe>`;
@@ -93,9 +92,6 @@ const ChartBox = ({ title, series, dates, min }) => {
         }
     }, [isMobile])
 
-    useEffect(() => {
-        console.log(echartRef.current.getEchartsInstance())
-    }, [series])
     return (
         <div className="chart-box container">
             <div className="row">

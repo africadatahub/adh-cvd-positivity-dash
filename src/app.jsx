@@ -52,7 +52,6 @@ function App() {
     if (_.find(selectedCountry1, function (o) { return o.iso_code == country.iso_code }) == undefined) {
       setSelectedCountries1(country);
       setCountry1(country.location)
-      console.log(country)
   
     }
   }
@@ -61,16 +60,13 @@ function App() {
     if (_.find(selectedCountry2, function (o) { return o.iso_code == country.iso_code }) == undefined) {
       setSelectedCountries2(country);
       setCountry2(country.location)
-      console.log(country)
     }
   }
 
   const months = (month) => {
     let file_data = new_cases_records;
     var d = new Date();
-    console.log('today ', d)
     d.setMonth(d.getMonth() - month);
-    console.log('old date ', d)
     file_data = file_data.filter(value => {
       return (
         new Date(value.date) >= d
@@ -138,7 +134,6 @@ function App() {
     setDates(dates)
     setDatesP(dates)
     let chart_data = _.map(file_data, 'positive_rate');
-    console.log('posi', country2, chart_data)
     
     let ser = {
       name: country2,
@@ -223,7 +218,6 @@ function App() {
       .catch(error=>{
         setLoading(false)
         setError(true)
-        console.log(error)
       })
   }
 
@@ -244,7 +238,6 @@ function App() {
       .catch(error=>{
         setLoading(false)
         setError(true)
-        console.log(error)
       })
   }
 

@@ -33,14 +33,12 @@ const ChartBox = ({ title, series, dates, min }) => {
         return val;
     }
     const embeddedCode = () => {
-        console.log('embeded clicked')
         var url = window.location.href + '?embed_positive';
         var div = document.createElement('textarea');
         var iframe = `<iframe width="700" height="400" src="${url}" frameBorder="0"></iframe>`;
         div.innerHTML = iframe;
         var element = document.getElementById('iframe1');
         iframe.src = url
-        console.log(iframe)
 
         if (!element.hasChildNodes()) {
             // It has at least one
@@ -92,9 +90,6 @@ const ChartBox = ({ title, series, dates, min }) => {
         }
     },[isMobile])
 
-    useEffect(()=>{
-        console.log(echartRef.current.getEchartsInstance())
-    },[series])
     return (
         <div className="chart-box container">
             <div className="row">
@@ -157,7 +152,6 @@ const ChartBox = ({ title, series, dates, min }) => {
                                 trigger: 'axis',
                                 formatter: function (params) {
                                     let newValue = params[0].axisValue.split('T')[0]
-                                    console.log(params[0])
                                     newValue = new Date(newValue)
                                     newValue = newValue.getDay() + 1 + " "+ monthNames[newValue.getMonth()] + ", "+ newValue.getFullYear()
                                     let label = '<strong>' + newValue + '</strong><hr/>';
