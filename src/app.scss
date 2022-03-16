@@ -108,7 +108,7 @@ h1 {
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        width: 108px;
+        width: 127px;
         padding: 10px 14px;
         margin-left: 5px;
         cursor: pointer;
@@ -493,6 +493,7 @@ footer{
             .text--box{
                 height: 92%;
                 @include custom-scrollbar(rgb(185, 185, 185), 5px);
+                overflow-y: auto;
             }
         }
         .date_range{

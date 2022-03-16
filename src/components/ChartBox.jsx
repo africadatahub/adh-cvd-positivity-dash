@@ -105,7 +105,7 @@ const ChartBox = ({ title, series, dates, min }) => {
                         ref={echartRef}
                         option={{
                             grid: isMobile ? { top: 20, bottom: 80, left: 60, right: 60 } : {},
-                            legend: {},
+                            legend: {icon: 'rect'},
                             yAxis: [
                                 {
 
@@ -181,10 +181,10 @@ const ChartBox = ({ title, series, dates, min }) => {
                     />
                     <div className="row">
                         <div className="col d-flex align-items-center">
-                            <p className="source">Source: <a target="_blank" href="https://adhtest.opencitieslab.org/datastore/dump/61ed4090-1598-4822-aa11-815e5984aba4">Our World in Data (OWID)</a></p>
+                            <p className="source">Source: <a target="_blank" href="https://ourworldindata.org/">Our World in Data (OWID)</a></p>
                         </div>
                         <div className="col col-btns">
-                            <a onClick={(e) => { e.preventDefault(); embeddedCode() }} className="share btn">Share</a>
+                            <a onClick={(e) => { e.preventDefault(); embeddedCode() }} className="share btn">Embed code</a>
                             <a target="_blank" href="https://adhtest.opencitieslab.org/datastore/dump/61ed4090-1598-4822-aa11-815e5984aba4?bom=True" className="download-btn btn">Download data</a>
                         </div>
                     </div>
@@ -205,7 +205,7 @@ const ChartBox = ({ title, series, dates, min }) => {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">Embeded Code</h5>
+                            <h5 className="modal-title" id="exampleModalLabel">Embed Code</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body" id="modal-body">

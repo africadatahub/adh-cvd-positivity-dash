@@ -22,6 +22,7 @@ import axios from 'axios';
 function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
+  const [error_message, setErrorMessage] = useState('Error Fetching Data')
   const [records, setRecords] =  useState([])
   const [new_cases_records, setNewCasesRecords] =  useState([])
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -35,16 +36,23 @@ function App() {
 
 
   const [no_embed_style, set_no_embed_style] = useState({ paddingTop: '20px' })
-  const [selectedCountry1, setSelectedCountries1] = useState()
-  const [selectedCountry2, setSelectedCountries2] = useState()
-  const [country1, setCountry1] = useState('Africa')
-  const [country2, setCountry2] = useState('Africa')
+  const [selectedCountry1, setSelectedCountries1] = useState({
+    "iso_code": "DZA",
+    "location": "Algeria"
+})
+  const [selectedCountry2, setSelectedCountries2] = useState({
+    "iso_code": "CMR",
+    "location": "Cameroon"
+})
+  const [country1, setCountry1] = useState('Algeria')
+  const [country2, setCountry2] = useState('Cameroon')
 
 
   const countrySelect1 = (country) => {
     if (_.find(selectedCountry1, function (o) { return o.iso_code == country.iso_code }) == undefined) {
       setSelectedCountries1(country);
       setCountry1(country.location)
+      console.log(country)
   
     }
   }
@@ -53,6 +61,7 @@ function App() {
     if (_.find(selectedCountry2, function (o) { return o.iso_code == country.iso_code }) == undefined) {
       setSelectedCountries2(country);
       setCountry2(country.location)
+      console.log(country)
     }
   }
 
@@ -68,9 +77,7 @@ function App() {
       )
     })
     let dates = _.map(file_data, 'date');
-    if(dates.length > 0){
-      setDates(dates)
-    }
+    setDates(dates)
   }
 
   const monthsP = (month) => {
@@ -83,9 +90,7 @@ function App() {
       )
     })
     let dates = _.map(file_data, 'date');
-    if(dates.length > 0){
-      setDatesP(dates)
-    }
+    setDatesP(dates)
   }
 
 
@@ -125,7 +130,6 @@ function App() {
     };
     let series = seriesP
     series[0] = ser
-    console.log('series', series)
     setSeriesP(series)
   }
   const updateCountryPositive2 = (result) => {
@@ -289,7 +293,7 @@ function App() {
         <>
           <div className="position-absolute top-50 start-50 translate-middle text-center">
             <FontAwesomeIcon icon={faExclamationTriangle} size="5x" />
-            <h3 className="mt-4">Error Fetching Data</h3>
+            <h3 className="mt-4">{error_message}</h3>
           </div>
         </> :
 
@@ -322,8 +326,8 @@ function App() {
             </Container>
 
           </div>
-          {window.location.search != '?embed_positive' ? <ChartBox title="New Tests: Regional Comparison" series={series} dates={dates} />: ''} 
-          {window.location.search != '?embed_newcases' ? <ChartBoxP title="Positivity Rate: Regional Comparison" series={seriesP} dates={datesP} />: ''} 
+          {window.location.search != '?embed_positive' ? <ChartBox title="New Tests: Country Comparison" series={series} dates={dates} />: ''} 
+          {window.location.search != '?embed_newcases' ? <ChartBoxP title="Positivity Rate: Country Comparison" series={seriesP} dates={datesP} />: ''} 
           {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' ? <Footer />: ''} 
         </>
   );
