@@ -18,7 +18,7 @@ export class Header extends React.Component {
                 <Container>
                     <Row className="justify-content-between">
                         <Col>
-                            <a href="#"  className='logo'><img src={logo} style={{height: '45px'}}/></a>
+                            <a href="https://www.africadatahub.org/"  className='logo'><img src={logo} style={{height: '45px'}}/></a>
                         </Col>
                         <Col xs="auto" className="navlinks">
                             <Button variant="white" onClick={() => { location.href='https://www.africadatahub.org/data-resources'}}>Data resources</Button>

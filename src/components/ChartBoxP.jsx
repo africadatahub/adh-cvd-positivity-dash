@@ -33,14 +33,12 @@ const ChartBox = ({ title, series, dates, min }) => {
         return val;
     }
     const embeddedCode = () => {
-        console.log('embeded clicked')
         var url = window.location.href + '?embed_positive';
         var div = document.createElement('textarea');
         var iframe = `<iframe width="700" height="400" src="${url}" frameBorder="0"></iframe>`;
         div.innerHTML = iframe;
         var element = document.getElementById('iframe1');
         iframe.src = url
-        console.log(iframe)
 
         if (!element.hasChildNodes()) {
             // It has at least one
@@ -92,9 +90,6 @@ const ChartBox = ({ title, series, dates, min }) => {
         }
     },[isMobile])
 
-    useEffect(()=>{
-        console.log(echartRef.current.getEchartsInstance())
-    },[series])
     return (
         <div className="chart-box container">
             <div className="row">
@@ -104,7 +99,7 @@ const ChartBox = ({ title, series, dates, min }) => {
                     ref={echartRef}
                         option={{
                             grid: isMobile ? { top:20, bottom: 80, left: 60, right: 60} : {},
-                            legend: {},
+                            legend: {icon: 'rect'},
                             yAxis: [
                                 {
                                         
@@ -161,13 +156,7 @@ const ChartBox = ({ title, series, dates, min }) => {
                                     newValue = newValue.getDay() + 1 + " "+ monthNames[newValue.getMonth()] + ", "+ newValue.getFullYear()
                                     let label = '<strong>' + newValue + '</strong><hr/>';
                                     _.forEach(params, function(param) {
-                                        let value = Math.round(param.value);
-                                        if(param.seriesName == 'positive_rate') {
-                                            value = (Math.round(param.value * 100) / 100) + '%';
-                                        }
-                                        if(param.seriesName == 'reproduction_rate') {
-                                            value = Math.round(param.value * 100) / 100;
-                                        }
+                                        let value = parseFloat(param.value)
                                         label += '<strong style="color: ' + param.color + '; text-transform: capitalize;">' + param.seriesName.replaceAll('_',' ') + '</strong>: ' + value + '<br/>'
                                     })
                       
@@ -180,10 +169,10 @@ const ChartBox = ({ title, series, dates, min }) => {
                     />
                     <div className="row">
                         <div className="col d-flex align-items-center">
-                            <p className="source">Source: <a target="_blank" href="https://adhtest.opencitieslab.org/datastore/dump/af42ed1a-0fb4-4846-9a28-f8baf3aee826">Our World in Data (OWID)</a></p>
+                            <p className="source">Source: <a target="_blank" href="https://ourworldindata.org/">Our World in Data (OWID)</a></p>
                         </div>
                         <div className="col col-btns">
-                            <a onClick={(e)=>{e.preventDefault(); embeddedCode()}} className="share btn">Share</a>
+                            <a onClick={(e)=>{e.preventDefault(); embeddedCode()}} className="share btn">Embed code</a>
                             <a target="_blank" href="https://adhtest.opencitieslab.org/datastore/dump/af42ed1a-0fb4-4846-9a28-f8baf3aee826?bom=True" className="download-btn btn">Download data</a>
                         </div>
                     </div>
@@ -191,10 +180,14 @@ const ChartBox = ({ title, series, dates, min }) => {
                 <div className="col-md-4 text">
                     <h5>How to Read this Chart</h5>
                     <div className="text--box">
-                        <p>
-                        Not every COVID-19 test yields a positive result. The positivity rate compares the volume of new confirmed cases with the number of tests undertaken. An increase in positivity rate could therefore signal a potential resurgence in COVID-19 infections if testing remains constant. If testing does not keep up with rising numbers of new cases, there is a risk that many people may have COVID-19 without knowing it and without isolating from others. It is therefore important for us to know how the rate of testing compares to the number of positive COVID-19 cases. According to the World Health Organisation (WHO) (May 2020), a positivity rate of less than 5% for two weeks is one indicator that the pandemic is under control in a country. 
-*This value is given as a rolling 7-day average which takes data from the last 7 days, adds it
-                        </p>
+                        <p>Not every COVID-19 test yields a positive result. The positivity rate compares the volume of new 
+                            confirmed cases with the number of tests undertaken. An increase in positivity rate could therefore signal a 
+                            potential resurgence in COVID-19 infections if testing remains constant. 
+                            If testing does not keep up with rising numbers of new cases, there is
+                             a risk that many people may have COVID-19 without knowing it and without isolating from others. 
+                             It is therefore important for us to know how the rate of testing compares to the number of positive COVID-19 cases. 
+                             According to the World Health Organisation (WHO) (May 2020), a positivity rate of less than 5% for two weeks is one indicator 
+                             that the pandemic is under control in a country.</p>
                     </div>
                 </div>
             </div>
@@ -203,7 +196,7 @@ const ChartBox = ({ title, series, dates, min }) => {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">Embeded Code</h5>
+                            <h5 className="modal-title" id="exampleModalLabel">Embed Code</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body" id="modal-body">
