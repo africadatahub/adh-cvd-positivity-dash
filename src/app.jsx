@@ -64,29 +64,59 @@ function App() {
   }
 
   const months = (month) => {
-    let file_data = new_cases_records;
-    var d = new Date();
-    d.setMonth(d.getMonth() - month);
-    file_data = file_data.filter(value => {
-      return (
-        new Date(value.date) >= d
-      )
+    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261ed4090-1598-4822-aa11-815e5984aba4%22%20WHERE%20region%20LIKE%20%27${country1}%27&limit=1500`)
+    .then(res=>{
+      let file_data = res.data.result.records;
+      var d = new Date();
+      d.setMonth(d.getMonth() - month);
+      file_data = file_data.filter(value => {
+        return (
+          new Date(value.date) >= d
+        )
+      })
+      updateCountryNewCases1(file_data)
     })
-    let dates = _.map(file_data, 'date');
-    setDates(dates)
+
+    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261ed4090-1598-4822-aa11-815e5984aba4%22%20WHERE%20region%20LIKE%20%27${country2}%27&limit=1500`)
+    .then(res=>{
+      let file_data = res.data.result.records;
+      var d = new Date();
+      d.setMonth(d.getMonth() - month);
+      file_data = file_data.filter(value => {
+        return (
+          new Date(value.date) >= d
+        )
+      })
+      updateCountryNewCases2(file_data)
+    })
   }
 
   const monthsP = (month) => {
-    let file_data = records;
-    var d = new Date();
-    d.setMonth(d.getMonth() - month);
-    file_data = file_data.filter(value => {
-      return (
-        new Date(value.date) >= d
-      )
+    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22af42ed1a-0fb4-4846-9a28-f8baf3aee826%22%20WHERE%20region%20LIKE%20%27${country1}%27&limit=1500`)
+    .then(res=>{
+      let file_data = res.data.result.records;
+      var d = new Date();
+      d.setMonth(d.getMonth() - month);
+      file_data = file_data.filter(value => {
+        return (
+          new Date(value.date) >= d
+        )
+      })
+      updateCountryPositive1(file_data)
     })
-    let dates = _.map(file_data, 'date');
-    setDatesP(dates)
+
+    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22af42ed1a-0fb4-4846-9a28-f8baf3aee826%22%20WHERE%20region%20LIKE%20%27${country2}%27&limit=1500`)
+    .then(res=>{
+      let file_data = res.data.result.records;
+      var d = new Date();
+      d.setMonth(d.getMonth() - month);
+      file_data = file_data.filter(value => {
+        return (
+          new Date(value.date) >= d
+        )
+      })
+      updateCountryPositive2(file_data)
+    })
   }
 
 
@@ -108,9 +138,8 @@ function App() {
   }
 
   const updateCountryPositive1 = (result) => {
-    let file_data = result.records;
+    let file_data = result;
     let dates = _.map(file_data, 'date');
-    setDates(dates)
     setDatesP(dates)
     let chart_data = _.map(file_data, 'positive_rate');
     let ser = {
@@ -129,9 +158,8 @@ function App() {
     setSeriesP(series)
   }
   const updateCountryPositive2 = (result) => {
-    let file_data = result.records;
+    let file_data = result;
     let dates = _.map(file_data, 'date');
-    setDates(dates)
     setDatesP(dates)
     let chart_data = _.map(file_data, 'positive_rate');
     
@@ -153,10 +181,9 @@ function App() {
 
 
   const updateCountryNewCases1 = (result) => {
-    let file_data = result.records;
+    let file_data = result;
     let dates = _.map(file_data, 'date');
     setDates(dates)
-    setDatesP(dates)
     let chart_data = _.map(file_data, 'new_cases');
     
     let ser = {
@@ -177,10 +204,10 @@ function App() {
   }
 
   const updateCountryNewCases2 = (result) => {
-    let file_data = result.records;
+    let file_data = result;
     let dates = _.map(file_data, 'date');
     setDates(dates)
-    setDatesP(dates)
+    console.log(file_data)
     let chart_data = _.map(file_data, 'new_cases');
     
     let ser = {
@@ -211,7 +238,7 @@ function App() {
         else{
           setError(false)
         }
-        callback(res.data.result)
+        callback(res.data.result.records)
         setRecords(res.data.result.records)
         setLoading(false)
       })
@@ -231,7 +258,7 @@ function App() {
         else{
           setError(false)
         }
-        callback(res.data.result)
+        callback(res.data.result.records)
         setNewCasesRecords(res.data.result.records)
         setLoading(false)
       })
