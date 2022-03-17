@@ -207,7 +207,6 @@ function App() {
     let file_data = result;
     let dates = _.map(file_data, 'date');
     setDates(dates)
-    console.log(file_data)
     let chart_data = _.map(file_data, 'new_cases');
     
     let ser = {
@@ -319,14 +318,15 @@ function App() {
 
         <>
           <div className="header pb-3">
-            {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' ? <Header /> : ''}
+            {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' && window.location.search != '?embed' ? <Header /> : ''}
+            {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' && window.location.search != '?embed' ?
             <Intro no_embed_style={no_embed_style}
               selectedCountry1={selectedCountry1}
               selectedCountry2={selectedCountry2}
               countrySelect1={countrySelect1}
               countrySelect2={countrySelect2}
               setDuration={duration_months}
-            />
+            />: ''}
           </div>
           <div className={ scrollPosition >= 111.11112213134766 ? 'sub-top resize' : "sub-top"}>
             <Container className="justify-content-between padding-left-zero ">
@@ -348,7 +348,7 @@ function App() {
           </div>
           {window.location.search != '?embed_positive' ? <ChartBox title="New Tests: Country Comparison" series={series} dates={dates} />: ''} 
           {window.location.search != '?embed_newcases' ? <ChartBoxP title="Positivity Rate: Country Comparison" series={seriesP} dates={datesP} />: ''} 
-          {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' ? <Footer />: ''} 
+          {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' && window.location.search != '?embed' ? <Footer />: ''} 
         </>
   );
 }
