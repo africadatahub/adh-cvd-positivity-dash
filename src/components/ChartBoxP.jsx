@@ -153,7 +153,7 @@ const ChartBox = ({ title, series, dates, min }) => {
                                 formatter: function (params) {
                                     let label = '<strong>' + params[0].axisValue.split('T')[0] + '</strong><hr/>';
                                     _.forEach(params, function(param) {
-                                        let value = Math.round(param.value);
+                                        let value = parseFloat(param.value);
                                         if(param.seriesName == 'positive_rate') {
                                             value = (Math.round(param.value * 100) / 100) + '%';
                                         }
