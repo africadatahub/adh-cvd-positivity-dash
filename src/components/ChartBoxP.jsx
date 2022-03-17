@@ -151,15 +151,18 @@ const ChartBox = ({ title, series, dates, min }) => {
                             tooltip: {
                                 trigger: 'axis',
                                 formatter: function (params) {
-                                    let newValue = params[0].axisValue.split('T')[0]
-                                    newValue = new Date(newValue)
-                                    newValue = newValue.getDay() + 1 + " "+ monthNames[newValue.getMonth()] + ", "+ newValue.getFullYear()
-                                    let label = '<strong>' + newValue + '</strong><hr/>';
+                                    let label = '<strong>' + params[0].axisValue.split('T')[0] + '</strong><hr/>';
                                     _.forEach(params, function(param) {
-                                        let value = parseFloat(param.value)
+                                        let value = parseFloat(param.value);
+                                        if(param.seriesName == 'positive_rate') {
+                                            value = (Math.round(param.value * 100) / 100) + '%';
+                                        }
+                                        if(param.seriesName == 'reproduction_rate') {
+                                            value = Math.round(param.value * 100) / 100;
+                                        }
                                         label += '<strong style="color: ' + param.color + '; text-transform: capitalize;">' + param.seriesName.replaceAll('_',' ') + '</strong>: ' + value + '<br/>'
                                     })
-                      
+                
                                     return label
                                 }
                             },

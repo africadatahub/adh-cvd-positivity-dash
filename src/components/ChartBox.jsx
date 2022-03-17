@@ -139,7 +139,7 @@ const ChartBox = ({ title, series, dates, min }) => {
                                     formatter: (function (value) {
                                         value = value.split('T')[0];
                                         value = new Date(value)
-                                        value = value.getDay() + 1 + " " + monthNames[value.getMonth()] + ", " + value.getFullYear()
+                                        value = value.getDay()  + " " + monthNames[value.getMonth()] + ", " + value.getFullYear()
                                         return value;
                                     }),
                                     fontWeight: '500',
@@ -153,21 +153,18 @@ const ChartBox = ({ title, series, dates, min }) => {
                             tooltip: {
                                 trigger: 'axis',
                                 formatter: function (params) {
-                                    let newValue = params[0].axisValue.split('T')[0]
-                                    newValue = new Date(newValue)
-                                    newValue = newValue.getDay() + 1 + " " + monthNames[newValue.getMonth()] + ", " + newValue.getFullYear()
-                                    let label = '<strong>' + newValue + '</strong><hr/>';
-                                    _.forEach(params, function (param) {
+                                    let label = '<strong>' + params[0].axisValue.split('T')[0] + '</strong><hr/>';
+                                    _.forEach(params, function(param) {
                                         let value = Math.round(param.value);
-                                        if (param.seriesName == 'positive_rate') {
+                                        if(param.seriesName == 'positive_rate') {
                                             value = (Math.round(param.value * 100) / 100) + '%';
                                         }
-                                        if (param.seriesName == 'reproduction_rate') {
+                                        if(param.seriesName == 'reproduction_rate') {
                                             value = Math.round(param.value * 100) / 100;
                                         }
-                                        label += '<strong style="color: ' + param.color + '; text-transform: capitalize;">' + param.seriesName.replaceAll('_', ' ') + '</strong>: ' + value + '<br/>'
+                                        label += '<strong style="color: ' + param.color + '; text-transform: capitalize;">' + param.seriesName.replaceAll('_',' ') + '</strong>: ' + value + '<br/>'
                                     })
-
+                
                                     return label
                                 }
                             },
