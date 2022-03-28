@@ -114,7 +114,7 @@ const ChartBox = ({ title, series, dates, min }) => {
                                         color: '#000000'
                                     },
                                     axisLabel: {
-                                        formatter: '{value}',
+                                        formatter: (function (value) { return (parseFloat(value) * 100).toFixed(0)}),
                                         fontWeight: '500',
                                         fontFamily: 'Work Sans',
                                         fontSize: 12,
@@ -153,7 +153,7 @@ const ChartBox = ({ title, series, dates, min }) => {
                                 formatter: function (params) {
                                     let label = '<strong>' + params[0].axisValue.split('T')[0] + '</strong><hr/>';
                                     _.forEach(params, function (param) {
-                                        let value = parseFloat(param.value);
+                                        let value = (parseFloat(param.value)* 100).toFixed(0);
                                         if (param.seriesName == 'positive_rate') {
                                             value = (Math.round(param.value * 100) / 100) + '%';
                                         }
