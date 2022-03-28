@@ -154,12 +154,6 @@ const ChartBox = ({ title, series, dates, min }) => {
                                     let label = '<strong>' + params[0].axisValue.split('T')[0] + '</strong><hr/>';
                                     _.forEach(params, function (param) {
                                         let value = (parseFloat(param.value)* 100).toFixed(0);
-                                        if (param.seriesName == 'positive_rate') {
-                                            value = (Math.round(param.value * 100) / 100) + '%';
-                                        }
-                                        if (param.seriesName == 'reproduction_rate') {
-                                            value = Math.round(param.value * 100) / 100;
-                                        }
                                         label += '<strong style="color: ' + param.color + '; text-transform: capitalize;">' + param.seriesName.replaceAll('_', ' ') + '</strong>: ' + value + '<br/>'
                                     })
 
