@@ -408,7 +408,8 @@ footer{
     &.resize{
         position: fixed;
         width: 100vw;
-        top: 70px;
+        top: 0;
+       // top: 70px;
         padding-top: 10px;
     }
     // position: fixed;
@@ -524,7 +525,7 @@ footer{
         .header {
             padding-bottom: 0 !important;
             .pm-75{
-                padding-top: 75px !important;
+               // padding-top: 75px !important;
             }
         }
         .countries-row{
@@ -605,7 +606,7 @@ footer{
         }
         .sub-top{
             &.resize{
-                top: 60px;
+                //top: 60px;
                 padding-top: 10px;
                 .date_range{
                     display: none !important;

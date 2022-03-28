@@ -286,9 +286,7 @@ function App() {
   useEffect(() => {
     api_new_cases(updateCountryNewCases1, country1 )
     api_positive(updateCountryPositive1, country1 )
-    if (window.location.search != '?embed') {
-      set_no_embed_style({ paddingTop: '100px' })
-    }
+
   }, [])
 
   useEffect(() => {
@@ -318,7 +316,7 @@ function App() {
 
         <>
           <div className="header pb-3">
-            {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' && window.location.search != '?embed' ? <Header /> : ''}
+            {/* {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' && window.location.search != '?embed' ? <Header /> : ''} */}
             {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' && window.location.search != '?embed' ?
             <Intro no_embed_style={no_embed_style}
               selectedCountry1={selectedCountry1}
