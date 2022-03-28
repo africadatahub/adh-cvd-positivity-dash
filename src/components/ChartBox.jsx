@@ -106,7 +106,7 @@ const ChartBox = ({ title, series, dates, min }) => {
                                 {
 
                                     type: 'value',
-                                    name: 'Value',
+                                    name: 'Total new tests conducted daily ',
                                     nameLocation: 'middle',
                                     nameGap: isMobile ? 40 : 60,
                                     nameTextStyle: {
@@ -186,7 +186,9 @@ const ChartBox = ({ title, series, dates, min }) => {
                     <h5>How to Read this Chart</h5>
                     <div className="text--box">
                         <p>
-                            Total number of tests that have been conducted to assess whether someone has COVID-19 or not. This is the cumulative value of all COVID-19 tests reported by the official health ministries from the start of the pandemic. The number of tests does not refer to the same in each country – one difference is that some countries report the number of people tested, while others report the number of tests performed (which can be higher if the same person is tested more than once). And other countries report their testing data in a way that leaves it unclear what the test count refers to exactly. Different countries include different types of tests in their reporting. For example, Zimbabwe reports on PCR and antigen COVID-19 tests while Senegal only reports on PCR testing.
+                        Number of tests that have been conducted daily to assess whether someone has COVID-19 or not. 
+                        This is the value of all COVID-19 tests reported by the official health ministries daily from the start of the pandemic.
+                         It is important to note that not every country shares their testing data daily. 
 
                             <br /><br />(This data is updated twice a week)
                         </p>
