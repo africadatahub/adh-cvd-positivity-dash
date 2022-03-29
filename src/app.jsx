@@ -183,6 +183,7 @@ function App() {
   const updateCountryNewCases1 = (result) => {
     let file_data = result;
     let dates = _.map(file_data, 'date');
+   console.log('updateCountryNewCases1 date', dates)
     setDates(dates)
     let chart_data = _.map(file_data, 'new_cases');
     
@@ -205,7 +206,8 @@ function App() {
 
   const updateCountryNewCases2 = (result) => {
     let file_data = result;
-    let dates = _.map(file_data, 'date');
+   let dates = _.map(file_data, 'date');
+    console.log('updateCountryNewCases2 date', dates)
     setDates(dates)
     let chart_data = _.map(file_data, 'new_cases');
     
@@ -266,6 +268,10 @@ function App() {
         setError(true)
       })
   }
+  const chart_dates = (result)=>{
+    let dates = _.map(result, 'date');
+    setDates(dates)
+  }
 
   const handleScroll = () => {
     const position = window.pageYOffset;
@@ -286,6 +292,7 @@ function App() {
   useEffect(() => {
     api_new_cases(updateCountryNewCases1, country1 )
     api_positive(updateCountryPositive1, country1 )
+    api_new_cases(chart_dates, country1 )
 
   }, [])
 
@@ -344,7 +351,7 @@ function App() {
             </Container>
 
           </div>
-          {window.location.search != '?embed_positive' ? <ChartBox title="New Tests: Country Comparison" series={series} dates={dates} />: ''} 
+          {window.location.search != '?embed_positive' ? <ChartBox title="New Tests: Country Comparison" series={series} dates={datesP} />: ''} 
           {window.location.search != '?embed_newcases' ? <ChartBoxP title="Positivity Rate: Country Comparison" series={seriesP} dates={datesP} />: ''} 
           {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' && window.location.search != '?embed' ? <Footer />: ''} 
         </>

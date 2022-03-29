@@ -126,7 +126,7 @@ const ChartBox = ({ title, series, dates, min }) => {
                             ],
                             xAxis: {
                                 type: 'category',
-                                name: 'Date',
+                                name: 'time',
                                 nameLocation: 'middle',
                                 nameGap: 40,
                                 nameTextStyle: {
@@ -139,7 +139,7 @@ const ChartBox = ({ title, series, dates, min }) => {
                                     formatter: (function (value) {
                                         value = value.split('T')[0];
                                         value = new Date(value)
-                                        value = value.getDay()  + " " + monthNames[value.getMonth()] + ", " + value.getFullYear()
+                                        value = value.getDay() + 1  + " " + monthNames[value.getMonth()] + ", " + value.getFullYear()
                                         return value;
                                     }),
                                     fontWeight: '500',
