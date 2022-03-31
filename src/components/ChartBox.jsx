@@ -7,6 +7,8 @@ import { Modal } from 'bootstrap'
 const ChartBox = ({ title, series, dates, min }) => {
     const echartRef = useRef();
     const [width, setWidth] = useState(window.innerWidth);
+    const [labels, setLabels] = useState(dates)
+    const [chart_series, setSeries] = useState(series)
     const handleWindowSizeChange = () => {
         setWidth(window.innerWidth);
     }
@@ -92,23 +94,56 @@ const ChartBox = ({ title, series, dates, min }) => {
         }
     }, [isMobile])
 
+    useEffect(() => {
+        setLabels(dates)
+    }, [dates])
+
+    useEffect(() => {
+        const echartInstance = echartRef.current.getEchartsInstance();
+        console.log(echartInstance)
+        echartInstance.resize()
+    }, [series])
+
+
     return (
         <div className="chart-box container">
             <div className="row">
                 <div className="col-md-8 chart-wrapper">
                     <h3 className="chart-box--title">{title}</h3>
-                    <ReactECharts
-                        ref={echartRef}
-                        option={{
-                            grid: isMobile ? { top: 20, bottom: 80, left: 60, right: 60 } : {},
-                            legend: {icon: 'rect'},
-                            yAxis: [
-                                {
-
-                                    type: 'value',
-                                    name: 'Total new tests conducted daily ',
+                    {
+                        series ? 
+                        <ReactECharts
+                            ref={echartRef}
+                            option={{
+                                grid: isMobile ? { top: 20, bottom: 80, left: 60, right: 60 } : {},
+                                legend: { icon: 'rect' },
+                                yAxis: [
+                                    {
+    
+                                        type: 'value',
+                                        name: 'Total new tests conducted daily ',
+                                        nameLocation: 'middle',
+                                        nameGap: isMobile ? 40 : 60,
+                                        nameTextStyle: {
+                                            fontWeight: '500',
+                                            fontFamily: 'Work Sans',
+                                            fontSize: 12,
+                                            color: '#000000'
+                                        },
+                                        axisLabel: {
+                                            formatter: isMobile ? mobileFormatter : '{value}',
+                                            fontWeight: '500',
+                                            fontFamily: 'Work Sans',
+                                            fontSize: 12,
+                                            color: '#000000'
+                                        }
+                                    },
+                                ],
+                                xAxis: {
+                                    type: 'category',
+                                    name: 'Date',
                                     nameLocation: 'middle',
-                                    nameGap: isMobile ? 40 : 60,
+                                    nameGap: 40,
                                     nameTextStyle: {
                                         fontWeight: '500',
                                         fontFamily: 'Work Sans',
@@ -116,62 +151,39 @@ const ChartBox = ({ title, series, dates, min }) => {
                                         color: '#000000'
                                     },
                                     axisLabel: {
-                                        formatter: isMobile ? mobileFormatter : '{value}',
+                                        formatter: (function (value) {
+                                            //value = value.split('T')[0];
+                                            value = new Date(value)
+                                            value = value.getDay() + 1 + " " + monthNames[value.getMonth()] + ", " + value.getFullYear()
+                                            return value;
+                                        }),
                                         fontWeight: '500',
                                         fontFamily: 'Work Sans',
                                         fontSize: 12,
                                         color: '#000000'
+                                    },
+                                    min: min,
+                                    data: dates,
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+                                    formatter: function (params) {
+                                        let date = params[0].axisValue.split('00:00:00 GM')[0]
+                                        let label = '<strong>' + date + '</strong><hr/>';
+                                        _.forEach(params, function (param) {
+                                            //let value = (parseFloat(param.value)* 100).toFixed(0);
+                                            let value = parseFloat(param.value)
+                                            label += '<strong style="color: ' + param.color + '; text-transform: capitalize;">' + param.seriesName.replaceAll('_', ' ') + '</strong>: ' + value + '<br/>'
+                                        })
+    
+                                        return label
                                     }
                                 },
-                            ],
-                            xAxis: {
-                                type: 'category',
-                                name: 'time',
-                                nameLocation: 'middle',
-                                nameGap: 40,
-                                nameTextStyle: {
-                                    fontWeight: '500',
-                                    fontFamily: 'Work Sans',
-                                    fontSize: 12,
-                                    color: '#000000'
-                                },
-                                axisLabel: {
-                                    formatter: (function (value) {
-                                        value = value.split('T')[0];
-                                        value = new Date(value)
-                                        value = value.getDay() + 1  + " " + monthNames[value.getMonth()] + ", " + value.getFullYear()
-                                        return value;
-                                    }),
-                                    fontWeight: '500',
-                                    fontFamily: 'Work Sans',
-                                    fontSize: 12,
-                                    color: '#000000'
-                                },
-                                min: min,
-                                data: dates,
-                            },
-                            tooltip: {
-                                trigger: 'axis',
-                                formatter: function (params) {
-                                    let label = '<strong>' + params[0].axisValue.split('T')[0] + '</strong><hr/>';
-                                    _.forEach(params, function(param) {
-                                        let value = Math.round(param.value);
-                                        if(param.seriesName == 'positive_rate') {
-                                            value = (Math.round(param.value * 100) / 100) + '%';
-                                        }
-                                        if(param.seriesName == 'reproduction_rate') {
-                                            value = Math.round(param.value * 100) / 100;
-                                        }
-                                        label += '<strong style="color: ' + param.color + '; text-transform: capitalize;">' + param.seriesName.replaceAll('_',' ') + '</strong>: ' + value + '<br/>'
-                                    })
-                
-                                    return label
-                                }
-                            },
-                            series: series
-                        }}
-                        style={{ height: '360px' }}
-                    />
+                                series: series
+                            }}
+                            style={{ height: '360px' }}
+                        />:""
+                    }
                     <div className="row">
                         <div className="col d-flex align-items-center">
                             <p className="source">Source: <a target="_blank" href="https://ourworldindata.org/">Our World in Data (OWID)</a></p>

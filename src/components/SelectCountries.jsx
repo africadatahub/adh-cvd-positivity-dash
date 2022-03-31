@@ -9,7 +9,7 @@ const SelectCountries = ({selectedCountry1, selectedCountry2, countrySelect1, co
     const [countries, setCountries] = useState([])
 
     const countries_api = callback =>{
-        axios.get('https://adhtest.opencitieslab.org/api/3/action/datastore_search?resource_id=de166a29-fede-4409-a72f-425ddc8d4bfb&limit=500')
+        axios.get('https://adhtest.opencitieslab.org/api/3/action/datastore_search?resource_id=a5e38622-9f9d-4c1c-82f7-85d41e1e73da&limit=500')
         .then(res=>{
           callback(res.data.result.records)
         })
@@ -17,7 +17,7 @@ const SelectCountries = ({selectedCountry1, selectedCountry2, countrySelect1, co
 
     useEffect(() => {
         countries_api(setCountries)
-      }, [countries])
+      }, [])
 
     return (
         <Row className="mt-2 mb-4 countries-row">
