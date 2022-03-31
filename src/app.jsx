@@ -271,11 +271,7 @@ function App() {
     for(let i = 0; i<file_data.length; i++){
       file_data[i].date = new Date(file_data[i].date)
     }
-    console.log(file_data)
-    console.log('new_dates updateCountryNewCases1',new_dates)
-    // let dates = _.map(file_data, 'date');
     setDates(new_dates)
-    // let chart_data = _.map(file_data, 'new_cases');
 
     let chart_data = []
     for(let i = 0; i < new_dates.length; i++){
@@ -292,7 +288,6 @@ function App() {
         chart_data.push("")
       }
     }
-    console.log('chart_data', chart_data)
 
     let ser = {
       name: country1,
@@ -308,7 +303,6 @@ function App() {
     let newSeries = series
     newSeries[0] = ser
     setSeries(newSeries)
-    console.log('newSeries', series)
 
   }
 
@@ -338,8 +332,6 @@ function App() {
         chart_data.push("")
       }
     }
-    console.log(' updateCountryNewCases2 chart_data', chart_data)
-    console.log('updateCountryNewCases2 new_dates', new_dates)
     setDates(new_dates)
     
     let ser = {
