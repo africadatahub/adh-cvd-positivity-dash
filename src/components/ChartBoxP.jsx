@@ -135,7 +135,7 @@ const ChartBox = ({ title, series, dates, min }) => {
                                 },
                                 axisLabel: {
                                     formatter: (function (value) {
-                                        value = value.split('T')[0];
+                                        //value = value.split('T')[0];
                                         value = new Date(value)
                                         value = value.getDay() + 1 + " " + monthNames[value.getMonth()] + ", " + value.getFullYear()
                                         return value;
@@ -151,15 +151,11 @@ const ChartBox = ({ title, series, dates, min }) => {
                             tooltip: {
                                 trigger: 'axis',
                                 formatter: function (params) {
-                                    let label = '<strong>' + params[0].axisValue.split('T')[0] + '</strong><hr/>';
+                                    let date = params[0].axisValue.split('00:00:00 GM')[0]
+                                    let label = '<strong>' + date + '</strong><hr/>';
                                     _.forEach(params, function (param) {
                                         let value = (parseFloat(param.value)* 100).toFixed(0);
-                                        if (param.seriesName == 'positive_rate') {
-                                            value = (Math.round(param.value * 100) / 100) + '%';
-                                        }
-                                        if (param.seriesName == 'reproduction_rate') {
-                                            value = Math.round(param.value * 100) / 100;
-                                        }
+                                        //let value = parseFloat(param.value)
                                         label += '<strong style="color: ' + param.color + '; text-transform: capitalize;">' + param.seriesName.replaceAll('_', ' ') + '</strong>: ' + value + '<br/>'
                                     })
 
