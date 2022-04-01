@@ -64,21 +64,20 @@ function App() {
       setCountry2(country.location)
     }
   }
-
+  const removeMonths = (months) => {
+    let date = new Date()
+    date.setMonth(date.getMonth() - months);
+    date.setMilliseconds(0)
+    date.setMinutes(0)
+    date.setSeconds(0)
+    date.setHours(0)
+    return new Date(date);
+  }
   const months = (month) => {
+    var d = removeMonths(month)
     axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261ed4090-1598-4822-aa11-815e5984aba4%22%20WHERE%20region%20LIKE%20%27${country1}%27&limit=1500`)
     .then(res=>{
       let file_data = res.data.result.records;
-      var d = new Date();
-      d.setMonth(d.getMonth() - month);
-      // file_data = file_data.filter(value => {
-      //   return (
-      //     new Date(value.date) >= d
-      //   )
-      // })
-      d.setMilliseconds(0)
-      d.setMinutes(0)
-      d.setSeconds(0)
       if(month == 1200){
         let new_dates = getDateArray(new Date('2020-02-01T00:00:00'), new Date())
         updateCountryNewCases1(file_data,new_dates)
@@ -93,16 +92,6 @@ function App() {
     axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261ed4090-1598-4822-aa11-815e5984aba4%22%20WHERE%20region%20LIKE%20%27${country2}%27&limit=1500`)
     .then(res=>{
       let file_data = res.data.result.records;
-      var d = new Date();
-      d.setMonth(d.getMonth() - month);
-      // file_data = file_data.filter(value => {
-      //   return (
-      //     new Date(value.date) >= d
-      //   )
-      // })
-      d.setMilliseconds(0)
-      d.setMinutes(0)
-      d.setSeconds(0)
       if(month == 1200){
         let new_dates = getDateArray(new Date('2020-02-01T00:00:00'), new Date())
         updateCountryNewCases2(file_data,new_dates)
@@ -116,19 +105,10 @@ function App() {
   }
 
   const monthsP = (month) => {
+    var d = removeMonths(month)
     axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22af42ed1a-0fb4-4846-9a28-f8baf3aee826%22%20WHERE%20region%20LIKE%20%27${country1}%27&limit=1500`)
     .then(res=>{
       let file_data = res.data.result.records;
-      var d = new Date();
-      d.setMonth(d.getMonth() - month);
-      // file_data = file_data.filter(value => {
-      //   return (
-      //     new Date(value.date) >= d
-      //   )
-      // })
-      d.setMilliseconds(0)
-      d.setMinutes(0)
-      d.setSeconds(0)
       if(month == 1200){
         let new_dates = getDateArray(new Date('2020-02-01T00:00:00'), new Date())
         updateCountryPositive1(file_data,new_dates)
@@ -143,16 +123,6 @@ function App() {
     axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22af42ed1a-0fb4-4846-9a28-f8baf3aee826%22%20WHERE%20region%20LIKE%20%27${country2}%27&limit=1500`)
     .then(res=>{
       let file_data = res.data.result.records;
-      var d = new Date();
-      d.setMonth(d.getMonth() - month);
-      // file_data = file_data.filter(value => {
-      //   return (
-      //     new Date(value.date) >= d
-      //   )
-      // })
-      d.setMilliseconds(0)
-      d.setMinutes(0)
-      d.setSeconds(0)
       if(month == 1200){
         let new_dates = getDateArray(new Date('2020-02-01T00:00:00'), new Date())
         updateCountryPositive2(file_data,new_dates)
@@ -271,11 +241,7 @@ function App() {
     for(let i = 0; i<file_data.length; i++){
       file_data[i].date = new Date(file_data[i].date)
     }
-    console.log(file_data)
-    console.log('new_dates updateCountryNewCases1',new_dates)
-    // let dates = _.map(file_data, 'date');
     setDates(new_dates)
-    // let chart_data = _.map(file_data, 'new_cases');
 
     let chart_data = []
     for(let i = 0; i < new_dates.length; i++){
@@ -292,7 +258,6 @@ function App() {
         chart_data.push("")
       }
     }
-    console.log('chart_data', chart_data)
 
     let ser = {
       name: country1,
@@ -308,7 +273,6 @@ function App() {
     let newSeries = series
     newSeries[0] = ser
     setSeries(newSeries)
-    console.log('newSeries', series)
 
   }
 
@@ -338,8 +302,6 @@ function App() {
         chart_data.push("")
       }
     }
-    console.log(' updateCountryNewCases2 chart_data', chart_data)
-    console.log('updateCountryNewCases2 new_dates', new_dates)
     setDates(new_dates)
     
     let ser = {
