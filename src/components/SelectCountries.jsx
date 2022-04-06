@@ -1,16 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DropdownButton, Dropdown, Row, Col } from "react-bootstrap";
 import ReactCountryFlag from 'react-country-flag';
 import getCountryISO2 from 'country-iso-3-to-2';
-import * as countriesList from '../data/countries.json';
+import axios from 'axios';
 
 
 const SelectCountries = ({selectedCountry1, selectedCountry2, countrySelect1, countrySelect2 }) => {
+    const [countries, setCountries] = useState([])
+
+    const countries_api = callback =>{
+        axios.get('https://adhtest.opencitieslab.org/api/3/action/datastore_search?resource_id=a5e38622-9f9d-4c1c-82f7-85d41e1e73da&limit=500')
+        .then(res=>{
+          callback(res.data.result.records)
+        })
+      }
+
+    useEffect(() => {
+        countries_api(setCountries)
+      }, [])
 
     return (
         <Row className="mt-2 mb-4 countries-row">
             <Col xs="auto">
-                <Row className="mt-4">
+                <Row >
                     <Col><h5 className="select-country--title" >Select Country/Region 1 </h5></Col>
                 </Row>
                 <DropdownButton 
@@ -29,18 +41,18 @@ const SelectCountries = ({selectedCountry1, selectedCountry2, countrySelect1, co
                         lineHeight: '2em',
                         
                     }} />
-            </div>{selectedCountry1.location}</> : "Choose Countries"} 
+            </div>{selectedCountry1.location}</> : "Choose country"} 
                 
                 className="country-select" >
-                    {countriesList.map((country, index) => (
-                        <Dropdown.Item key={country.iso_code} onClick={() => countrySelect1({ iso_code: country.iso_code, location: country.location })}>
+                    {countries.map((country, index) => (
+                        <Dropdown.Item key={country.iso} onClick={() => countrySelect1({ iso_code: country.iso, location: country.countries })}>
 
-                            {country.location}</Dropdown.Item>
+                            {country.countries}</Dropdown.Item>
                     ))}
                 </DropdownButton>
             </Col>
             <Col xs="auto">
-                <Row className="mt-4">
+                <Row >
                     <Col>
 
                         <h5 className="select-country--title">Select Country/Region 2 </h5></Col>
@@ -61,13 +73,13 @@ const SelectCountries = ({selectedCountry1, selectedCountry2, countrySelect1, co
                         lineHeight: '2em',
                         
                     }} />
-            </div>{selectedCountry2.location}</> : "Choose Countries"} 
+            </div>{selectedCountry2.location}</> : "Choose country"} 
                 
                 className="country-select" >
-                    {countriesList.map((country, index) => (
-                        <Dropdown.Item key={country.iso_code} onClick={() => countrySelect2({ iso_code: country.iso_code, location: country.location })}>
+                    {countries.map((country, index) => (
+                        <Dropdown.Item key={country.iso} onClick={() => countrySelect2({ iso_code: country.iso, location: country.countries })}>
 
-                            {country.location}</Dropdown.Item>
+                            {country.countries}</Dropdown.Item>
                     ))}
                 </DropdownButton>
             </Col>

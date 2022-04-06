@@ -22,6 +22,7 @@ import axios from 'axios';
 function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
+  const [error_message, setErrorMessage] = useState('Error Fetching Data')
   const [records, setRecords] =  useState([])
   const [new_cases_records, setNewCasesRecords] =  useState([])
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -32,13 +33,21 @@ function App() {
   //Positivity Rate: Regional Comparison
   const [seriesP, setSeriesP] = useState([])
   const [datesP, setDatesP] = useState([])
+  const [ datesCountry2, setDatesCountry2] = useState([])
+  const [ datesCountry1, setDatesCountry1] = useState([])
 
 
   const [no_embed_style, set_no_embed_style] = useState({ paddingTop: '20px' })
-  const [selectedCountry1, setSelectedCountries1] = useState()
-  const [selectedCountry2, setSelectedCountries2] = useState()
-  const [country1, setCountry1] = useState('Africa')
-  const [country2, setCountry2] = useState('Africa')
+  const [selectedCountry1, setSelectedCountries1] = useState({
+    "iso_code": "DZA",
+    "location": "Algeria"
+})
+  const [selectedCountry2, setSelectedCountries2] = useState({
+    "iso_code": "CMR",
+    "location": "Cameroon"
+})
+  const [country1, setCountry1] = useState('Algeria')
+  const [country2, setCountry2] = useState('Cameroon')
 
 
   const countrySelect1 = (country) => {
@@ -55,37 +64,75 @@ function App() {
       setCountry2(country.location)
     }
   }
-
+  const removeMonths = (months) => {
+    let date = new Date()
+    date.setMonth(date.getMonth() - months);
+    date.setMilliseconds(0)
+    date.setMinutes(0)
+    date.setSeconds(0)
+    date.setHours(0)
+    return new Date(date);
+  }
   const months = (month) => {
-    let file_data = new_cases_records;
-    var d = new Date();
-    console.log('today ', d)
-    d.setMonth(d.getMonth() - month);
-    console.log('old date ', d)
-    file_data = file_data.filter(value => {
-      return (
-        new Date(value.date) >= d
-      )
+    var d = removeMonths(month)
+    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261ed4090-1598-4822-aa11-815e5984aba4%22%20WHERE%20region%20LIKE%20%27${country1}%27&limit=1500`)
+    .then(res=>{
+      let file_data = res.data.result.records;
+      if(month == 1200){
+        let new_dates = getDateArray(new Date('2020-02-01T00:00:00'), new Date())
+        updateCountryNewCases1(file_data,new_dates)
+      }
+      else{
+        let new_dates = getDateArray(new Date(d), new Date())
+        updateCountryNewCases1(file_data,new_dates)
+
+      }
     })
-    let dates = _.map(file_data, 'date');
-    if(dates.length > 0){
-      setDates(dates)
-    }
+
+    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261ed4090-1598-4822-aa11-815e5984aba4%22%20WHERE%20region%20LIKE%20%27${country2}%27&limit=1500`)
+    .then(res=>{
+      let file_data = res.data.result.records;
+      if(month == 1200){
+        let new_dates = getDateArray(new Date('2020-02-01T00:00:00'), new Date())
+        updateCountryNewCases2(file_data,new_dates)
+      }
+      else{
+        let new_dates = getDateArray(new Date(d), new Date())
+        updateCountryNewCases2(file_data,new_dates)
+
+      }
+    })
   }
 
   const monthsP = (month) => {
-    let file_data = records;
-    var d = new Date();
-    d.setMonth(d.getMonth() - month);
-    file_data = file_data.filter(value => {
-      return (
-        new Date(value.date) >= d
-      )
+    var d = removeMonths(month)
+    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22af42ed1a-0fb4-4846-9a28-f8baf3aee826%22%20WHERE%20region%20LIKE%20%27${country1}%27&limit=1500`)
+    .then(res=>{
+      let file_data = res.data.result.records;
+      if(month == 1200){
+        let new_dates = getDateArray(new Date('2020-02-01T00:00:00'), new Date())
+        updateCountryPositive1(file_data,new_dates)
+      }
+      else{
+        let new_dates = getDateArray(new Date(d), new Date())
+        updateCountryPositive1(file_data,new_dates)
+
+      }
     })
-    let dates = _.map(file_data, 'date');
-    if(dates.length > 0){
-      setDatesP(dates)
-    }
+
+    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22af42ed1a-0fb4-4846-9a28-f8baf3aee826%22%20WHERE%20region%20LIKE%20%27${country2}%27&limit=1500`)
+    .then(res=>{
+      let file_data = res.data.result.records;
+      if(month == 1200){
+        let new_dates = getDateArray(new Date('2020-02-01T00:00:00'), new Date())
+        updateCountryPositive2(file_data,new_dates)
+      }
+      else{
+        let new_dates = getDateArray(new Date(d), new Date())
+        updateCountryPositive2(file_data,new_dates)
+
+      }
+    })
   }
 
 
@@ -106,12 +153,29 @@ function App() {
     }
   }
 
-  const updateCountryPositive1 = (result) => {
-    let file_data = result.records;
-    let dates = _.map(file_data, 'date');
-    setDates(dates)
-    setDatesP(dates)
-    let chart_data = _.map(file_data, 'positive_rate');
+  const updateCountryPositive1 = (result, new_dates) => {
+    let file_data = result;
+    for(let i = 0; i<file_data.length; i++){
+      file_data[i].date = new Date(file_data[i].date)
+    }
+    setDatesP(new_dates)
+
+    let chart_data = []
+    for(let i = 0; i < new_dates.length; i++){
+      let value;
+      for(let f=0; f < file_data.length; f++){
+        if(file_data[f]['date'].getTime() == new_dates[i].getTime() ){
+          value = file_data[f]['positive_rate']
+        }
+      }
+      if(value){
+        chart_data.push(value)
+      }
+      else{
+        chart_data.push("")
+      }
+    }
+
     let ser = {
       name: country1,
       data: chart_data,
@@ -125,16 +189,32 @@ function App() {
     };
     let series = seriesP
     series[0] = ser
-    console.log('series', series)
     setSeriesP(series)
   }
-  const updateCountryPositive2 = (result) => {
-    let file_data = result.records;
-    let dates = _.map(file_data, 'date');
-    setDates(dates)
-    setDatesP(dates)
-    let chart_data = _.map(file_data, 'positive_rate');
-    console.log('posi', country2, chart_data)
+  const updateCountryPositive2 = (result, new_dates) => {
+    let file_data = result;
+    for(let i = 0; i<file_data.length; i++){
+      file_data[i].date = new Date(file_data[i].date)
+    }
+    //let dates = _.map(file_data, 'date');
+    setDatesP(new_dates)
+
+    let chart_data = []
+    for(let i = 0; i < new_dates.length; i++){
+      let value;
+      for(let f=0; f < file_data.length; f++){
+        if(file_data[f]['date'].getTime() == new_dates[i].getTime() ){
+          value = file_data[f]['positive_rate']
+        }
+      }
+      if(value){
+        chart_data.push(value)
+      }
+      else{
+        chart_data.push("")
+      }
+    }
+
     
     let ser = {
       name: country2,
@@ -153,13 +233,32 @@ function App() {
   }
 
 
-  const updateCountryNewCases1 = (result) => {
-    let file_data = result.records;
-    let dates = _.map(file_data, 'date');
-    setDates(dates)
-    setDatesP(dates)
-    let chart_data = _.map(file_data, 'new_cases');
-    
+  const updateCountryNewCases1 = (result, new_dates) => {
+    let file_data = result;
+    file_data.sort(function(a,b){
+      return new Date(a.date) - new Date(b.date)
+    })
+    for(let i = 0; i<file_data.length; i++){
+      file_data[i].date = new Date(file_data[i].date)
+    }
+    setDates(new_dates)
+
+    let chart_data = []
+    for(let i = 0; i < new_dates.length; i++){
+      let value;
+      for(let f=0; f < file_data.length; f++){
+        if( file_data[f]['date'].getTime() == new_dates[i].getTime() ){
+          value = file_data[f]['new_cases']
+        }
+      }
+      if(value){
+        chart_data.push(value)
+      }
+      else{
+        chart_data.push("")
+      }
+    }
+
     let ser = {
       name: country1,
       data: chart_data,
@@ -177,12 +276,33 @@ function App() {
 
   }
 
-  const updateCountryNewCases2 = (result) => {
-    let file_data = result.records;
-    let dates = _.map(file_data, 'date');
-    setDates(dates)
-    setDatesP(dates)
-    let chart_data = _.map(file_data, 'new_cases');
+  const updateCountryNewCases2 = (result, new_dates) => {
+    let file_data = result;
+    file_data.sort(function(a,b){
+      return new Date(a.date) - new Date(b.date)
+    })
+    for(let i = 0; i<file_data.length; i++){
+      file_data[i].date = new Date(file_data[i].date)
+    }
+    console.log(file_data)
+    
+    let chart_data = []
+    for(let i = 0; i < new_dates.length; i++){
+      let value;
+      let current_date = new_dates[i]
+      for(let f=0; f < file_data.length; f++){
+        if(file_data[f]['date'].getTime() == current_date.getTime()){
+          value = file_data[f]['new_cases']
+        }
+      }
+      if(value){
+        chart_data.push(value)
+      }
+      else{
+        chart_data.push("")
+      }
+    }
+    setDates(new_dates)
     
     let ser = {
       name: country2,
@@ -203,18 +323,17 @@ function App() {
 
 
   const api_positive = (callback, country) => {
-    setLoading(true)
-    
+   
     axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22af42ed1a-0fb4-4846-9a28-f8baf3aee826%22%20WHERE%20region%20LIKE%20%27${country}%27&limit=1500`)
       .then(res => {
-        console.log('pos', res.data.result.records)
         if(res.data.result.records.length < 1){
           setError(true)
         }
         else{
           setError(false)
         }
-        callback(res.data.result)
+        let new_dates = getDateArray(new Date('2020-02-01T00:00:00'), new Date())
+        callback(res.data.result.records, new_dates)
         setRecords(res.data.result.records)
         setLoading(false)
       })
@@ -226,19 +345,17 @@ function App() {
   }
 
   const api_new_cases = (callback, country) => {
-    setLoading(true)
     
     axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261ed4090-1598-4822-aa11-815e5984aba4%22%20WHERE%20region%20LIKE%20%27${country}%27&limit=1500`)
       .then(res => {
-        console.log('new cases:', res.data.result.records)
         if(res.data.result.records.length < 1){
           setError(true)
         }
         else{
           setError(false)
         }
-        callback(res.data.result)
-        setNewCasesRecords(res.data.result.records)
+        let new_dates = getDateArray(new Date('2020-02-01T00:00:00'), new Date())
+        callback(res.data.result.records, new_dates)
         setLoading(false)
       })
       .catch(error=>{
@@ -253,12 +370,27 @@ function App() {
     setScrollPosition(position);
 };
 
+// date array
+const getDateArray = (start, end) => {
 
-  // useEffect(() => {
+  var
+    arr = new Array(), dt = new Date(start);
 
-  //   api(updateData2)
-  //   api(PositiveDataDefault2)
-  // }, [selectedCountry2])
+  while (dt <= end) {
+    arr.push(new Date(dt));
+    dt.setDate(dt.getDate() + 1);
+  }
+
+  return arr;
+
+}
+
+const getDates = ()=>{
+  let start_date = new Date('2020-02-01T00:00:00')
+  let arr = getDateArray(new Date('2020-02-01T00:00:00'), new Date());
+  //console.log(arr)
+  setDates(arr)
+}
 
   useEffect(() => {
     api_positive(updateCountryPositive2, country2 )
@@ -272,16 +404,14 @@ function App() {
 
 
   useEffect(() => {
+    getDates()
     api_new_cases(updateCountryNewCases1, country1 )
     api_positive(updateCountryPositive1, country1 )
-    if (window.location.search != '?embed') {
-      set_no_embed_style({ paddingTop: '100px' })
-    }
+
   }, [])
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
-
     return () => {
         window.removeEventListener('scroll', handleScroll);
     };
@@ -300,23 +430,24 @@ function App() {
         <>
           <div className="position-absolute top-50 start-50 translate-middle text-center">
             <FontAwesomeIcon icon={faExclamationTriangle} size="5x" />
-            <h3 className="mt-4">Error Fetching Data</h3>
+            <h3 className="mt-4">{error_message}</h3>
           </div>
         </> :
 
         <>
           <div className="header pb-3">
-            {window.location.search != '?embed' ? <Header /> : ''}
+            {/* {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' && window.location.search != '?embed' ? <Header /> : ''} */}
+            {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' && window.location.search != '?embed' ?
             <Intro no_embed_style={no_embed_style}
               selectedCountry1={selectedCountry1}
               selectedCountry2={selectedCountry2}
               countrySelect1={countrySelect1}
               countrySelect2={countrySelect2}
               setDuration={duration_months}
-            />
+            />: ''}
           </div>
           <div className={ scrollPosition >= 111.11112213134766 ? 'sub-top resize' : "sub-top"}>
-            <Container className="justify-content-between ">
+            <Container className="justify-content-between padding-left-zero ">
             <Row>
                 <Col md={6}>
                     <SelectCountries 
@@ -333,12 +464,9 @@ function App() {
             </Container>
 
           </div>
-          {
-            dates ? 
-            <ChartBox title="New Tests: Regional Comparison" series={series} dates={dates} />:""
-          }
-          <ChartBoxP title="Positivity Rate: Regional Comparison" series={seriesP} dates={datesP} />
-          <Footer />
+          {window.location.search != '?embed_positive' ? <ChartBox title="New Tests: Country Comparison" series={series} dates={dates} />: ''} 
+          {window.location.search != '?embed_newcases' ? <ChartBoxP title="Positivity Rate: Country Comparison" series={seriesP} dates={dates} />: ''} 
+          {window.location.search != '?embed_positive' && window.location.search != '?embed_newcases' && window.location.search != '?embed' ? <Footer />: ''} 
         </>
   );
 }

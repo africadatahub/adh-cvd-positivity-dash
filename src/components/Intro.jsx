@@ -5,7 +5,7 @@ import { Container, Row, Col } from "react-bootstrap";
 
 const Intro = ({ no_embed_style, selectedCountry1, selectedCountry2, countrySelect1, countrySelect2,setDuration }) => {
     return (
-        <Container style={no_embed_style} className="justify-content-between">
+        <Container style={no_embed_style} className="justify-content-between padding-left-zero pm-75">
             <Row>
                 <Col>
                     <h3 className="heading">COVID-19 testing and positivity rates: Compare countries & regions</h3>
