@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { parse } from 'papaparse';
 import _ from 'lodash';
 import './app.scss';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Container, Row, Col } from "react-bootstrap";
-import { faTimes, faExclamationTriangle, faRedo, faPlay, faPause, faArrowLeft, faStepForward, faStepBackward } from '@fortawesome/free-solid-svg-icons';
-import { Header } from './components/Header';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+//import { Header } from './components/Header';
 import Spinner from 'react-bootstrap/Spinner';
 import Intro from './components/Intro';
 import Footer from './components/Footer';
@@ -24,7 +23,6 @@ function App() {
   const [error, setError] = useState(false)
   const [error_message, setErrorMessage] = useState('Error Fetching Data')
   const [records, setRecords] =  useState([])
-  const [new_cases_records, setNewCasesRecords] =  useState([])
   const [scrollPosition, setScrollPosition] = useState(0);
   //New Tests: Regional Comparison
   const [series, setSeries] = useState([])
@@ -33,8 +31,6 @@ function App() {
   //Positivity Rate: Regional Comparison
   const [seriesP, setSeriesP] = useState([])
   const [datesP, setDatesP] = useState([])
-  const [ datesCountry2, setDatesCountry2] = useState([])
-  const [ datesCountry1, setDatesCountry1] = useState([])
 
 
   const [no_embed_style, set_no_embed_style] = useState({ paddingTop: '20px' })
@@ -386,7 +382,6 @@ const getDateArray = (start, end) => {
 }
 
 const getDates = ()=>{
-  let start_date = new Date('2020-02-01T00:00:00')
   let arr = getDateArray(new Date('2020-02-01T00:00:00'), new Date());
   //console.log(arr)
   setDates(arr)
