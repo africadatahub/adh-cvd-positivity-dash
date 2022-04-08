@@ -35,15 +35,15 @@ function App() {
 
   const [no_embed_style, set_no_embed_style] = useState({ paddingTop: '20px' })
   const [selectedCountry1, setSelectedCountries1] = useState({
-    "iso_code": "DZA",
-    "location": "Algeria"
+    "iso_code": "ZAF",
+    "location": "South Africa"
 })
   const [selectedCountry2, setSelectedCountries2] = useState({
-    "iso_code": "CMR",
-    "location": "Cameroon"
+    "iso_code": "BWA",
+    "location": "Botswana"
 })
-  const [country1, setCountry1] = useState('Algeria')
-  const [country2, setCountry2] = useState('Cameroon')
+  const [country1, setCountry1] = useState("South Africa")
+  const [country2, setCountry2] = useState('Botswana')
 
 
   const countrySelect1 = (country) => {
@@ -71,7 +71,7 @@ function App() {
   }
   const months = (month) => {
     var d = removeMonths(month)
-    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261ed4090-1598-4822-aa11-815e5984aba4%22%20WHERE%20region%20LIKE%20%27${country1}%27&limit=1500`)
+    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2270b33a4d-2e9c-4fe3-a6f3-e2e9179f4037%22%20WHERE%20region%20LIKE%20%27${country1}%27&limit=1500`)
     .then(res=>{
       let file_data = res.data.result.records;
       if(month == 1200){
@@ -85,7 +85,7 @@ function App() {
       }
     })
 
-    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261ed4090-1598-4822-aa11-815e5984aba4%22%20WHERE%20region%20LIKE%20%27${country2}%27&limit=1500`)
+    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2270b33a4d-2e9c-4fe3-a6f3-e2e9179f4037%22%20WHERE%20region%20LIKE%20%27${country2}%27&limit=1500`)
     .then(res=>{
       let file_data = res.data.result.records;
       if(month == 1200){
@@ -244,7 +244,7 @@ function App() {
       let value;
       for(let f=0; f < file_data.length; f++){
         if( file_data[f]['date'].getTime() == new_dates[i].getTime() ){
-          value = file_data[f]['new_cases']
+          value = file_data[f]['new_tests']
         }
       }
       if(value){
@@ -288,7 +288,7 @@ function App() {
       let current_date = new_dates[i]
       for(let f=0; f < file_data.length; f++){
         if(file_data[f]['date'].getTime() == current_date.getTime()){
-          value = file_data[f]['new_cases']
+          value = file_data[f]['new_tests']
         }
       }
       if(value){
@@ -342,8 +342,9 @@ function App() {
 
   const api_new_cases = (callback, country) => {
     
-    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261ed4090-1598-4822-aa11-815e5984aba4%22%20WHERE%20region%20LIKE%20%27${country}%27&limit=1500`)
+    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2270b33a4d-2e9c-4fe3-a6f3-e2e9179f4037%22%20WHERE%20region%20LIKE%20%27${country}%27&limit=1500`)
       .then(res => {
+        console.log('new test',res.data.result.records )
         if(res.data.result.records.length < 1){
           setError(true)
         }
