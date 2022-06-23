@@ -70,10 +70,13 @@ function App() {
     return new Date(date);
   }
   const months = (month) => {
+
     var d = removeMonths(month)
-    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2270b33a4d-2e9c-4fe3-a6f3-e2e9179f4037%22%20WHERE%20region%20LIKE%20%27${country1}%27&limit=1500`)
+    axios.get(`https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22214d4944-ee6f-42df-a44e-2efdb3259d98%22%20WHERE%20region%20LIKE%20%27${country1}%27&limit=1500`)
     .then(res=>{
+      console.log('hello')
       let file_data = res.data.result.records;
+      console.log(file_data)
       if(month == 1200){
         let new_dates = getDateArray(new Date('2020-02-01T00:00:00'), new Date())
         updateCountryNewCases1(file_data,new_dates)
@@ -85,7 +88,7 @@ function App() {
       }
     })
 
-    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2270b33a4d-2e9c-4fe3-a6f3-e2e9179f4037%22%20WHERE%20region%20LIKE%20%27${country2}%27&limit=1500`)
+    axios.get(`https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22214d4944-ee6f-42df-a44e-2efdb3259d98%22%20WHERE%20region%20LIKE%20%27${country2}%27&limit=1500`)
     .then(res=>{
       let file_data = res.data.result.records;
       if(month == 1200){
@@ -102,7 +105,7 @@ function App() {
 
   const monthsP = (month) => {
     var d = removeMonths(month)
-    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22af42ed1a-0fb4-4846-9a28-f8baf3aee826%22%20WHERE%20region%20LIKE%20%27${country1}%27&limit=1500`)
+    axios.get(`https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22d5711682-5beb-409f-9852-2195a687cf47%22%20WHERE%20region%20LIKE%20%27${country1}%27&limit=1500`)
     .then(res=>{
       let file_data = res.data.result.records;
       if(month == 1200){
@@ -116,8 +119,9 @@ function App() {
       }
     })
 
-    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22af42ed1a-0fb4-4846-9a28-f8baf3aee826%22%20WHERE%20region%20LIKE%20%27${country2}%27&limit=1500`)
+    axios.get(`https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22d5711682-5beb-409f-9852-2195a687cf47%22%20WHERE%20region%20LIKE%20%27${country2}%27&limit=1500`)
     .then(res=>{
+      console.log('hello')
       let file_data = res.data.result.records;
       if(month == 1200){
         let new_dates = getDateArray(new Date('2020-02-01T00:00:00'), new Date())
@@ -320,8 +324,9 @@ function App() {
 
   const api_positive = (callback, country) => {
    
-    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22af42ed1a-0fb4-4846-9a28-f8baf3aee826%22%20WHERE%20region%20LIKE%20%27${country}%27&limit=1500`)
+    axios.get(`https://ckandev.africadatahub.orgapi/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%d5711682-5beb-409f-9852-2195a687cf47%22%20WHERE%20region%20LIKE%20%27${country}%27&limit=1500`)
       .then(res => {
+        console.log('hello')
         if(res.data.result.records.length < 1){
           setError(true)
         }
@@ -342,9 +347,9 @@ function App() {
 
   const api_new_cases = (callback, country) => {
     
-    axios.get(`https://adhtest.opencitieslab.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2270b33a4d-2e9c-4fe3-a6f3-e2e9179f4037%22%20WHERE%20region%20LIKE%20%27${country}%27&limit=1500`)
+    axios.get(`https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%214d4944-ee6f-42df-a44e-2efdb3259d98%22%20WHERE%20region%20LIKE%20%27${country}%27&limit=1500`)
       .then(res => {
-        console.log('new test',res.data.result.records )
+        console.log('new test')
         if(res.data.result.records.length < 1){
           setError(true)
         }
