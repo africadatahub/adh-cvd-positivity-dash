@@ -9,7 +9,7 @@ const SelectCountries = ({selectedCountry1, selectedCountry2, countrySelect1, co
     const [countries, setCountries] = useState([])
 
     const countries_api = callback =>{
-        axios.get('https://adhtest.opencitieslab.org/api/3/action/datastore_search?resource_id=a5e38622-9f9d-4c1c-82f7-85d41e1e73da&limit=500')
+        axios.get('https://ckandev.africadatahub.org/api/3/action/datastore_search?resource_id=995fdebb-66e4-4a63-a153-dcb5eca0be2c')
         .then(res=>{
           callback(res.data.result.records)
         })
