@@ -190,7 +190,7 @@ const ChartBox = ({ title, series, dates, min }) => {
                         </div>
                         <div className="col col-btns">
                             <a onClick={(e) => { e.preventDefault(); embeddedCode() }} className="share btn">Embed code</a>
-                            <a target="_blank" href="https://adhtest.opencitieslab.org/datastore/dump/70b33a4d-2e9c-4fe3-a6f3-e2e9179f4037?bom=True" className="download-btn btn">Download data</a>
+                            <a target="_blank" href="https://ckandev.africadatahub.org/datastore/dump/214d4944-ee6f-42df-a44e-2efdb3259d98?bom=True" className="download-btn btn">Download data</a>
                         </div>
                     </div>
                 </div>
