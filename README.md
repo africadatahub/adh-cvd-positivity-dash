@@ -2,7 +2,7 @@
 
 ## Local development
 
-Install dependencies by running yarn in the folder:
+Install dependencies by running the following in the folder:
 
 ```
 npm install
